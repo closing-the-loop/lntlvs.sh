@@ -93,6 +93,6 @@ Options:
   --maxinvoices <value>   The max number of invoices to query. (default: 1000)
   --tlvkey <value>        The TLV key to extract and decode. (default: 7629169)
   --lncliwrapper <value>  A wrapper script to use instead if lncli is not available. (default: ./bitcoin-lncli.sh)
-  --jsonlines             If set, output will be formatted in JSON Lines format (one JSON per line). (dafault: 0)
+  --jsonlines             If set, output will be formatted in JSON Lines format (one JSON per line). (default: 0)
   --output <value>        If set, custom records will be written to this file in JSON Lines format (one JSON per line).
 ```

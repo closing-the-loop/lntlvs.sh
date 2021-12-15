@@ -38,6 +38,7 @@ INDEXOFFSET=0
 MAX_INVOICES=1000
 TLV_KEY=7629169 # See https://github.com/satoshisstream/satoshis.stream/blob/main/TLV_registry.md.
 LNCLI_WRAPPER="./bitcoin-lncli.sh" # The lncli wrapper script on a BTCPay Server.
+JSONLINES=0
 
 unset OUTPUT
 
@@ -52,6 +53,7 @@ usage () {
   echo -e "\t--maxinvoices <value>\tThe max number of invoices to query. (default: 1000)"
   echo -e "\t--tlvkey <value>\tThe TLV key to extract and decode. (default: 7629169)"
   echo -e "\t--lncliwrapper <value>\tA wrapper script to use instead if lncli is not available. (default: ./bitcoin-lncli.sh)"
+  echo -e "\t--jsonlines\t\tIf set, output will be formatted in JSON Lines format (one JSON per line)."
   echo -e "\t--output <value>\tIf set, custom records will be written to this file in JSON Lines format (one JSON per line)."
 }
 
@@ -63,6 +65,7 @@ while [[ $# -gt 0 ]]; do
     --maxinvoices)    MAX_INVOICES="$2"  ; shift 2 ;;
     --tlvkey)         TLV_KEY="$2"       ; shift 2 ;;
     --lncliwrapper)   LNCLI_WRAPPER="$2" ; shift 2 ;;
+    --jsonlines)      JSONLINES=1        ; shift   ;;
     --output)         OUTPUT="$2"        ; shift 2 ;;
     --help) usage; exit;;
     *) echo "Unknown option: $1."; usage; exit 2;;
@@ -116,7 +119,11 @@ custom_records=$(
 ################################################################################
 
 if [ -z "$OUTPUT" ]; then
-  echo $custom_records | jq -s '.'
+  if [ "$JSONLINES" -eq 0 ]; then
+    echo $custom_records | jq -s '.'
+  else
+    echo $custom_records | jq -c '.'
+  fi
 else
   OUTPUT_DIR="$(cd -- "$(dirname "$OUTPUT")" && pwd)"
   OUTPUT_FILE="$(basename "$OUTPUT")"

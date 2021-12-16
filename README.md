@@ -11,9 +11,21 @@
 </h3>
 
 
-## 🛫 Examples
+## 🛫 Example
 
-The script either prints JSON or outputs [JSON Lines](https://jsonlines.org) to a file.
+The `lntlvs.sh` script extracts custom TLV records from invoices.
+
+The `helpers/split.sh` script can be used to filter the output of the `lntlvs.sh` script for TLV records containing a certain pattern and to split them to individual files.
+
+For example, to get all boostagrams from the first 20,000 invoices on a BTCPay Server node and write them to files in a `custom_records/` directory, run:
+
+```shell
+./lntlvs.sh --lncliwrapper ../bitcoin-lncli.sh --maxinvoices 20000 --jsonlines | helpers/split.sh - custom_records/
+```
+
+## 📚 Usage
+
+The `lntlvs.sh` script either prints JSON or outputs [JSON Lines](https://jsonlines.org) to a file.
 
 ### 1️⃣ JSON
 
@@ -22,7 +34,7 @@ For debugging and informational purposes, JSON output is supported.
 👉 Run:
 
 ``` shell
-./lntlvs --maxinvoices 2
+./lntlvs.sh --maxinvoices 2
 ```
 
 🖨 This will print JSON like so:
@@ -59,7 +71,7 @@ For persisting custom records, they can be written to a file, one JSON per line.
 👉 Run:
 
 ``` shell
-./lntlvs --maxinvoices 2 --output records.json
+./lntlvs.sh --maxinvoices 2 --output records.json
 ```
 
 🖨 This will write custom records to a file `records.json` like so:
@@ -81,5 +93,6 @@ Options:
   --maxinvoices <value>   The max number of invoices to query. (default: 1000)
   --tlvkey <value>        The TLV key to extract and decode. (default: 7629169)
   --lncliwrapper <value>  A wrapper script to use instead if lncli is not available. (default: ./bitcoin-lncli.sh)
+  --jsonlines             If set, output will be formatted in JSON Lines format (one JSON per line). (default: 0)
   --output <value>        If set, custom records will be written to this file in JSON Lines format (one JSON per line).
 ```
